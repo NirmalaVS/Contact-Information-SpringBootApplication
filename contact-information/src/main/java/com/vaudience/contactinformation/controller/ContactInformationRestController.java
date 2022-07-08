@@ -13,24 +13,35 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.vaudience.contactinformation.entity.ContactBasicInfo;
 import com.vaudience.contactinformation.repository.ContactAddressRepository;
 import com.vaudience.contactinformation.repository.ContactBasicInfoRepository;
+import com.vaudience.contactinformation.service.ContactInformationService;
 
 @Controller
 public class ContactInformationRestController {
 
 	@Autowired
-	ContactBasicInfoRepository contactBasicInfoRepository;
+	ContactInformationService contactInformationService;
 
-	@Autowired
-	ContactAddressRepository contactAddressRepository;
+	/**
+	 * GetMapping to get contact Informations stored in Database
+	 * 
+	 * @return List of contactInformations
+	 */
 
 	@GetMapping(value = "/contactInfos")
 	public @ResponseBody List<ContactBasicInfo> getContactInformations() {
-		return contactBasicInfoRepository.findAll();
+		return contactInformationService.getContactInformation();
 	}
+
+	/**
+	 * PostMapping to post contactInformation
+	 * 
+	 * @param contactBasicInfo
+	 * @return JsonValue
+	 */
 
 	@PostMapping(value = "/contactInfo", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody ContactBasicInfo postContactInformation(@RequestBody ContactBasicInfo contactBasicInfo) {
-		return contactBasicInfoRepository.save(contactBasicInfo);
+		return contactInformationService.saveOrUpdateContactInformation(contactBasicInfo);
 	}
 
 }
