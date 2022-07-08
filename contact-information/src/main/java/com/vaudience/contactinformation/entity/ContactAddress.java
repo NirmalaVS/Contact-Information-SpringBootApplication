@@ -1,6 +1,7 @@
 package com.vaudience.contactinformation.entity;
 
-import javax.persistence.Column;
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,26 +15,45 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name="Contact_Address")
-public class ContactAddress {
-	
+@Table(name = "Contact_Address")
+public class ContactAddress implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "Address_Id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long addressId;
 
 	/**
 	 * To set the city name can be any city name
 	 */
-	@Column(name = "City_Name")
-	private String city;
+	private String cityName;
 
 	/**
 	 * To set the zip code can be any zip code but should contain only integer value
 	 */
-	@Column(name = "Zip_Code")
 	private int zipCode;
-	
+
+
+
+	public ContactAddress() {
+
+	}
+
+	/**
+	 * @param addressId
+	 * @param city
+	 * @param zipCode
+	 */
+	public ContactAddress(long addressId, String cityName, int zipCode) {
+		super();
+		this.addressId = addressId;
+		this.cityName = cityName;
+		this.zipCode = zipCode;
+	}
 
 	/**
 	 * @return the addressId Getter method of addressId
@@ -52,15 +72,15 @@ public class ContactAddress {
 	/**
 	 * @return the city Getter method to get city value
 	 */
-	public String getCity() {
-		return city;
+	public String getCityName() {
+		return cityName;
 	}
 
 	/**
 	 * @param city Setter method to set city value
 	 */
-	public void setCity(String city) {
-		this.city = city;
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
 	}
 
 	/**
@@ -76,6 +96,17 @@ public class ContactAddress {
 	 */
 	public void setZipCode(int zipCode) {
 		this.zipCode = zipCode;
+	}
+
+
+
+	/**
+	 * To string method
+	 */
+
+	@Override
+	public String toString() {
+		return "ContactAddress [addressId=" + addressId + ", cityName=" + cityName + ", zipCode=" + zipCode + "]";
 	}
 
 }

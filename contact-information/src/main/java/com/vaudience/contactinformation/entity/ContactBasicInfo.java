@@ -1,7 +1,9 @@
 package com.vaudience.contactinformation.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,48 +11,69 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name="Contact_Basic_Info")
-public class ContactBasicInfo {
+@Table(name = "Contact_Basic_Info")
+public class ContactBasicInfo implements Serializable {
 
+	
+	private static final long serialVersionUID = 1L;
 	@Id
-	@GenericGenerator(name = "sequence_contactId", strategy = "com.vaudience.contactinformation.contactIdGenerator.IdGenerator")
-	@GeneratedValue(generator = "sequence_contactId")
-	@Column(name = "ContactInfo_Id")
-	private Long contactId;
+	@GeneratedValue(generator = "prod-generator")
+	@GenericGenerator(name = "prod-generator", strategy = "com.vaudience.contactinformation.contactIdGenerator.IdGenerator")
+	@Column(name="Contact_Id")
+	private String contactId;
 	/**
 	 * To set fullName of the contactperson
 	 */
-	@Column(name = "Full_Name")
 	private String fullName;
 
 	/**
 	 * To set DateOfBirth of the contactperson
 	 */
-	@Column(name = "Date_Of_Birth")
+	@Temporal(TemporalType.DATE)
 	private Date dateOfBirth;
 
 	/**
 	 * To set ContactAddress of the contactperson
 	 */
-	@OneToOne
-    @JoinColumn(name="Address_Id")
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "addressId", unique = true)
 	private ContactAddress contactAddress;
+
+	public ContactBasicInfo() {
+
+	}
+
+	/**
+	 * @param contactId
+	 * @param fullName
+	 * @param dateOfBirth
+	 * @param contactAddress
+	 */
+	public ContactBasicInfo(String contactId, String fullName, Date dateOfBirth, ContactAddress contactAddress) {
+		super();
+		this.contactId = contactId;
+		this.fullName = fullName;
+		this.dateOfBirth = dateOfBirth;
+		this.contactAddress = contactAddress;
+	}
 
 	/**
 	 * @return the contactId
 	 */
-	public Long getContactId() {
+	public String getContactId() {
 		return contactId;
 	}
 
 	/**
 	 * @param contactId the contactId to set
 	 */
-	public void setContactId(Long contactId) {
+	public void setContactId(String contactId) {
 		this.contactId = contactId;
 	}
 
@@ -106,6 +129,15 @@ public class ContactBasicInfo {
 	 */
 	public void setContactAddress(ContactAddress contactAddress) {
 		this.contactAddress = contactAddress;
+	}
+
+	/**
+	 * To string method
+	 */
+	@Override
+	public String toString() {
+		return "ContactBasicInfo [contactId=" + contactId + ", fullName=" + fullName + ", dateOfBirth=" + dateOfBirth
+				+ ", contactAddress=" + contactAddress + "]";
 	}
 
 }
