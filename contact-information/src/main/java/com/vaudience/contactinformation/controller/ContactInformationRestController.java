@@ -7,8 +7,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -68,6 +70,28 @@ public class ContactInformationRestController {
 	public ResponseEntity<String> deleteContactInformation(@PathVariable(value = "contactId") String contactId) {
 		return contactInformationService.deleteContactInformation(contactId);
 	}
-	
 
+	/**
+	 * Put Mapping to update the entire contactInfo content
+	 * 
+	 * @param contactBasicInfo
+	 * @return
+	 */
+
+	@PutMapping(value = "/contactInfo")
+	public @ResponseBody ContactBasicInfo updateContactInformation(@RequestBody ContactBasicInfo contactBasicInfo) {
+		return contactInformationService.saveOrUpdateContactInformation(contactBasicInfo);
+	}
+
+	/**
+	 * Patch Mapping to update only one field or Partial Update
+	 * 
+	 * @param fullName,contactId
+	 * @return
+	 */
+	@PatchMapping(value = "/contactInfo/{contactId}/{fullName}")
+	public @ResponseBody ContactBasicInfo updateFullNameInContactInformation(
+			@PathVariable(value = "contactId") String contactId, @PathVariable(value = "fullName") String fullName) {
+		return contactInformationService.updateFirstName(contactId, fullName);
+	}
 }

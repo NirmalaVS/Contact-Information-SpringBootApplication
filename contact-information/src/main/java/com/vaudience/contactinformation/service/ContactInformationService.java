@@ -57,12 +57,12 @@ public class ContactInformationService {
 				contactBasicInfoDb.setContactAddress(contactBasicInfo.getContactAddress());
 				contactBasicInfoDb.setFullName(contactBasicInfo.getFullName());
 				contactBasicInfoDb.setDateOfBirth(contactBasicInfo.getDateOfBirth());
+				contactBasicInfoDb.setContactAddress(contactBasicInfo.getContactAddress());
 				contactBasicInfoDb = contactBasicInfoRepository.save(contactBasicInfoDb);
 
 				return contactBasicInfoDb;
 			} else {
-				throw new RecordNotFoundException(
-						"No Contact information available for given contact Id " + contactBasicInfo.getContactId());
+				throw new RecordNotFoundException("No Contact information available for given contact Id ");
 			}
 		}
 	}
@@ -74,7 +74,7 @@ public class ContactInformationService {
 	 * @return
 	 */
 	public List<ContactBasicInfo> getContactBasedOnZipCode(int zipCode) {
-		List<ContactBasicInfo> contactsList = new ArrayList<ContactBasicInfo>();
+		List<ContactBasicInfo> contactsList = new ArrayList<>();
 		List<Long> addressIdList = contactAddressRepository.findByZipCode(zipCode);
 		if (!addressIdList.isEmpty()) {
 			List<ContactBasicInfo> contactBasicInfoList = contactBasicInfoRepository.findAll();
@@ -91,7 +91,7 @@ public class ContactInformationService {
 		}
 		return contactsList;
 	}
-	
+
 	/**
 	 * Service Implementation to DeleteContactInformation by contactId
 	 * 
@@ -108,6 +108,24 @@ public class ContactInformationService {
 		}
 		return ResponseEntity.ok("Deleted successfully");
 
+	}
+
+
+	/**
+	 * Service Implementation to updateFirstName by contactId
+	 * 
+	 * @param contactId,fullName
+	 * @return
+	 */
+	public ContactBasicInfo updateFirstName(String contactId, String fullName) {
+		Optional<ContactBasicInfo> contactBasicInfoOptional = contactBasicInfoRepository.findByContactId(contactId);
+		if (contactBasicInfoOptional.isPresent()) {
+			ContactBasicInfo contactBasicInfoDb = contactBasicInfoOptional.get();
+			contactBasicInfoDb.setFullName(fullName);
+			return contactBasicInfoDb;
+		} else {
+			throw new RecordNotFoundException("No Contact information available for given contact Id ");
+		}
 	}
 
 }
