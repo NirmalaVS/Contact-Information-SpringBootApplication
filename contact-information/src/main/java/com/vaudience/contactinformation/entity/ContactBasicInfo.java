@@ -18,6 +18,14 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+
+/**
+ * Entity class for Contact Basic Information 
+ * 
+ * @author Nirmala Sivakumar
+ *
+ */
+
 @Entity
 @Table(name = "Contact_Basic_Info")
 public class ContactBasicInfo implements Serializable {

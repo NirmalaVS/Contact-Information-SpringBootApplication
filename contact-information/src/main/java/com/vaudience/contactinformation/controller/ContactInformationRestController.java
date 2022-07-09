@@ -17,6 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.vaudience.contactinformation.entity.ContactBasicInfo;
 import com.vaudience.contactinformation.service.ContactInformationService;
 
+/**
+ * This is the controller class of RestFull application
+ * 
+ * @author NirmalaSivakumar
+ *
+ */
+
 @RestController
 public class ContactInformationRestController {
 

@@ -8,6 +8,13 @@ import org.springframework.stereotype.Repository;
 
 import com.vaudience.contactinformation.entity.ContactBasicInfo;
 
+/**
+ * This is the repository class for ContactBasicInfo 
+ * 
+ * @author Nirmala Sivakumar
+ *
+ */
+
 @Repository
 public interface ContactBasicInfoRepository extends JpaRepository<ContactBasicInfo, Long> {
 

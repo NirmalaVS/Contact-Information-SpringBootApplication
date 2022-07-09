@@ -15,6 +15,13 @@ import com.vaudience.contactinformation.entity.ContactBasicInfo;
 import com.vaudience.contactinformation.repository.ContactAddressRepository;
 import com.vaudience.contactinformation.repository.ContactBasicInfoRepository;
 
+/**
+ * Service layer of the contactInformation application
+ * 
+ * @author Nirmala Sivakumar
+ *
+ */
+
 @Service
 public class ContactInformationService {
 
