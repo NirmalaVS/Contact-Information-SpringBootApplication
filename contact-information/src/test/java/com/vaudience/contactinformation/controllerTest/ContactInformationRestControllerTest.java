@@ -1,10 +1,9 @@
 package com.vaudience.contactinformation.controllerTest;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -16,8 +15,15 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.vaudience.contactinformation.controller.ContactInformationRestController;
 import com.vaudience.contactinformation.entity.ContactAddress;
@@ -34,18 +40,33 @@ public class ContactInformationRestControllerTest {
 	@Autowired
 	MockMvc mockMvc;
 
+	String mockJson = "{\"fullName\":\"Aditya\",\"dateOfBirth\":\"1996-11-14\",\"contactAddress\":{\"cityName\":\"Stuttgart\",\"zipCode\":70569}}";
+
 	@Test
-	public void testGetContactInformations() throws Exception {
+	public void getContactInformationsTest() throws Exception {
 		ContactAddress contactAddress = new ContactAddress(8, "Stuttgart", 70569);
-		String dob = "1997-14-11";
-		Date dateOfBirth = new SimpleDateFormat("yyyy-MM-dd").parse(dob);
-		ContactBasicInfo contactBasicInfo = new ContactBasicInfo("CO11", "Willams", dateOfBirth, contactAddress);
-
+		ContactBasicInfo contactBasicInfo = new ContactBasicInfo("CO11", "Willams", new Date(), contactAddress);
+		System.out.println(contactBasicInfo.toString());
 		List<ContactBasicInfo> contactBasicInfoList = Arrays.asList(contactBasicInfo);
-		Mockito.when(contactInformationService.getContactInformation()).thenReturn(contactBasicInfoList);
+		ResponseEntity<List<ContactBasicInfo>> response = new ResponseEntity<>(contactBasicInfoList, HttpStatus.OK);
+		Mockito.when(contactInformationService.getContactInformation()).thenReturn(response);
 
-		mockMvc.perform(get("/contactInfos")).andExpect(status().isOk()).andExpect(jsonPath("$", Matchers.hasSize(1)))
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/contactInfo").accept(MediaType.APPLICATION_JSON);
+
+		mockMvc.perform(requestBuilder).andExpect(status().isOk()).andExpect(jsonPath("$", Matchers.hasSize(1)))
 				.andExpect(jsonPath("$[0].fullName", Matchers.is("Willams")));
+	}
+
+	@Test
+	public void createContactInformationTest() throws Exception {
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/contactInfo").accept(MediaType.APPLICATION_JSON)
+				.content(mockJson).contentType(MediaType.APPLICATION_JSON);
+
+		MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
+
+		MockHttpServletResponse mockHttpServletResponse = mvcResult.getResponse();
+
+		assertEquals(HttpStatus.OK.value(), mockHttpServletResponse.getStatus());
 	}
 
 }

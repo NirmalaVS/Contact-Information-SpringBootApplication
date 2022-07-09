@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vaudience.contactinformation.entity.ContactBasicInfo;
@@ -31,7 +30,7 @@ public class ContactInformationRestController {
 	 */
 
 	@GetMapping(value = "/contactInfo")
-	public @ResponseBody List<ContactBasicInfo> getContactInformations() {
+	public ResponseEntity<List<ContactBasicInfo>> getContactInformations() {
 		return contactInformationService.getContactInformation();
 	}
 
@@ -43,7 +42,7 @@ public class ContactInformationRestController {
 	 */
 
 	@PostMapping(value = "/contactInfo", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody ContactBasicInfo postContactInformation(@RequestBody ContactBasicInfo contactBasicInfo) {
+	public ResponseEntity<ContactBasicInfo> postContactInformation(@RequestBody ContactBasicInfo contactBasicInfo) {
 		return contactInformationService.saveOrUpdateContactInformation(contactBasicInfo);
 	}
 
@@ -55,7 +54,8 @@ public class ContactInformationRestController {
 	 */
 
 	@GetMapping(value = "/contactInfo/{zipCode}")
-	public @ResponseBody List<ContactBasicInfo> getContactBasedOnZipCode(@PathVariable(value = "zipCode") int zipCode) {
+	public ResponseEntity<List<ContactBasicInfo>> getContactBasedOnZipCode(
+			@PathVariable(value = "zipCode") int zipCode) {
 		return contactInformationService.getContactBasedOnZipCode(zipCode);
 	}
 
@@ -79,7 +79,7 @@ public class ContactInformationRestController {
 	 */
 
 	@PutMapping(value = "/contactInfo")
-	public @ResponseBody ContactBasicInfo updateContactInformation(@RequestBody ContactBasicInfo contactBasicInfo) {
+	public ResponseEntity<ContactBasicInfo> updateContactInformation(@RequestBody ContactBasicInfo contactBasicInfo) {
 		return contactInformationService.saveOrUpdateContactInformation(contactBasicInfo);
 	}
 
@@ -90,7 +90,7 @@ public class ContactInformationRestController {
 	 * @return
 	 */
 	@PatchMapping(value = "/contactInfo/{contactId}/{fullName}")
-	public @ResponseBody ContactBasicInfo updateFullNameInContactInformation(
+	public ResponseEntity<ContactBasicInfo> updateFullNameInContactInformation(
 			@PathVariable(value = "contactId") String contactId, @PathVariable(value = "fullName") String fullName) {
 		return contactInformationService.updateFirstName(contactId, fullName);
 	}

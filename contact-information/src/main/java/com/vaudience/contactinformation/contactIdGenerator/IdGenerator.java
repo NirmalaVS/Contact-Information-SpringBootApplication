@@ -8,10 +8,13 @@ import java.sql.Statement;
 
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
-
 import org.hibernate.id.IdentifierGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class IdGenerator implements IdentifierGenerator {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(IdentifierGenerator.class);
 
 	@Override
 	public Serializable generate(SharedSessionContractImplementor session, Object object) throws HibernateException {
@@ -33,7 +36,7 @@ public class IdGenerator implements IdentifierGenerator {
 
 		} catch (SQLException ex) {
 			System.out.println("Exception has occured while generating ContactId " + ex.toString());
-
+			LOGGER.error("Exception has occured while generating ContactId {} ", ex.toString());
 		}
 
 		return null;

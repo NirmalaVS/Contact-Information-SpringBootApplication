@@ -16,16 +16,17 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name = "Contact_Basic_Info")
 public class ContactBasicInfo implements Serializable {
 
-	
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(generator = "prod-generator")
 	@GenericGenerator(name = "prod-generator", strategy = "com.vaudience.contactinformation.contactIdGenerator.IdGenerator")
-	@Column(name="Contact_Id")
+	@Column(name = "Contact_Id")
 	private String contactId;
 	/**
 	 * To set fullName of the contactperson
@@ -36,6 +37,7 @@ public class ContactBasicInfo implements Serializable {
 	 * To set DateOfBirth of the contactperson
 	 */
 	@Temporal(TemporalType.DATE)
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date dateOfBirth;
 
 	/**
