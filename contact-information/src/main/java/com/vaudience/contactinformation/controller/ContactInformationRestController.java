@@ -4,18 +4,19 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.vaudience.contactinformation.entity.ContactBasicInfo;
-import com.vaudience.contactinformation.repository.ContactAddressRepository;
-import com.vaudience.contactinformation.repository.ContactBasicInfoRepository;
 import com.vaudience.contactinformation.service.ContactInformationService;
 
-@Controller
+@RestController
 public class ContactInformationRestController {
 
 	@Autowired
@@ -27,7 +28,7 @@ public class ContactInformationRestController {
 	 * @return List of contactInformations
 	 */
 
-	@GetMapping(value = "/contactInfos")
+	@GetMapping(value = "/contactInfo")
 	public @ResponseBody List<ContactBasicInfo> getContactInformations() {
 		return contactInformationService.getContactInformation();
 	}
@@ -43,5 +44,30 @@ public class ContactInformationRestController {
 	public @ResponseBody ContactBasicInfo postContactInformation(@RequestBody ContactBasicInfo contactBasicInfo) {
 		return contactInformationService.saveOrUpdateContactInformation(contactBasicInfo);
 	}
+
+	/**
+	 * GetMapping to get contact Information based on zipcode
+	 * 
+	 * @param zipCode
+	 * @return
+	 */
+
+	@GetMapping(value = "/contactInfo/{zipCode}")
+	public @ResponseBody List<ContactBasicInfo> getContactBasedOnZipCode(@PathVariable(value = "zipCode") int zipCode) {
+		return contactInformationService.getContactBasedOnZipCode(zipCode);
+	}
+
+	/**
+	 * DeleteMapping to delete based on contactId
+	 * 
+	 * @param contactId
+	 * @return
+	 */
+
+	@DeleteMapping(value = "/contactInfo/{contactId}")
+	public ResponseEntity<String> deleteContactInformation(@PathVariable(value = "contactId") String contactId) {
+		return contactInformationService.deleteContactInformation(contactId);
+	}
+	
 
 }

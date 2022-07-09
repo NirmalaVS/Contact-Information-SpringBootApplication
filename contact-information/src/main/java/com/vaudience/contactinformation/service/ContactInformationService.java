@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.vaudience.contactinformation.entity.ContactBasicInfo;
@@ -20,10 +21,10 @@ public class ContactInformationService {
 
 	@Autowired
 	ContactAddressRepository contactAddressRepository;
-	
+
 	/**
-	 * This is service impl for getContactInformation method
-	 * Retrieves all the contactInformation stored in Database
+	 * This is service impl for getContactInformation method Retrieves all the
+	 * contactInformation stored in Database
 	 * 
 	 * @return List
 	 */
@@ -36,10 +37,10 @@ public class ContactInformationService {
 			return new ArrayList<ContactBasicInfo>();
 		}
 	}
-	
+
 	/**
-	 * This is service impl for saveOrUpdateContactInformation method
-	 * Either saves new record or updates existing record based on contact Id
+	 * This is service impl for saveOrUpdateContactInformation method Either saves
+	 * new record or updates existing record based on contact Id
 	 * 
 	 * @param contactBasicInfo
 	 * @return
@@ -64,6 +65,49 @@ public class ContactInformationService {
 						"No Contact information available for given contact Id " + contactBasicInfo.getContactId());
 			}
 		}
+	}
+
+	/**
+	 * This is service impl of getContactBasedOnZipCode
+	 * 
+	 * @param zipCode
+	 * @return
+	 */
+	public List<ContactBasicInfo> getContactBasedOnZipCode(int zipCode) {
+		List<ContactBasicInfo> contactsList = new ArrayList<ContactBasicInfo>();
+		List<Long> addressIdList = contactAddressRepository.findByZipCode(zipCode);
+		if (!addressIdList.isEmpty()) {
+			List<ContactBasicInfo> contactBasicInfoList = contactBasicInfoRepository.findAll();
+			if (!contactBasicInfoList.isEmpty()) {
+				for (ContactBasicInfo contactBasicInfo : contactBasicInfoList) {
+					if (addressIdList.contains(contactBasicInfo.getContactAddress().getAddressId())) {
+						contactsList.add(contactBasicInfo);
+					}
+				}
+				return contactsList;
+			} else {
+				return new ArrayList<ContactBasicInfo>();
+			}
+		}
+		return contactsList;
+	}
+	
+	/**
+	 * Service Implementation to DeleteContactInformation by contactId
+	 * 
+	 * @param contactId
+	 * @return
+	 */
+
+	public ResponseEntity<String> deleteContactInformation(String contactId) {
+		Optional<ContactBasicInfo> contactBasicInfoOptional = contactBasicInfoRepository.findByContactId(contactId);
+		if (contactBasicInfoOptional.isPresent()) {
+			contactBasicInfoRepository.delete(contactBasicInfoOptional.get());
+		} else {
+			throw new RecordNotFoundException("No employee record exist for given id");
+		}
+		return ResponseEntity.ok("Deleted successfully");
+
 	}
 
 }

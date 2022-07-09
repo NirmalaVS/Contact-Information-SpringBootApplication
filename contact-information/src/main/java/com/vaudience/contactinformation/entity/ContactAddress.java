@@ -2,6 +2,7 @@ package com.vaudience.contactinformation.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,6 +26,7 @@ public class ContactAddress implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "Address_Id")
 	private long addressId;
 
 	/**
@@ -35,9 +37,8 @@ public class ContactAddress implements Serializable {
 	/**
 	 * To set the zip code can be any zip code but should contain only integer value
 	 */
+	@Column(name = "Zip_Code")
 	private int zipCode;
-
-
 
 	public ContactAddress() {
 
@@ -97,8 +98,6 @@ public class ContactAddress implements Serializable {
 	public void setZipCode(int zipCode) {
 		this.zipCode = zipCode;
 	}
-
-
 
 	/**
 	 * To string method
