@@ -26,7 +26,10 @@ PROCEDURE TO RUN THE APPLICATION
 	11.Use the below URL to check the Request and Response format 
 			http://localhost:8080/swagger-ui/index.html
 			
-	12. Screenshots of the Test case executed are attached in the git hub link.
+	12.The h2 database used can be viewed with below url
+			http://localhost:8080/h2-console
+			
+	13. Screenshots of the Test case executed are attached in the git hub link.
 		https://github.com/NirmalaVS/Contact-Information-SpringBootApplication
 	
 
